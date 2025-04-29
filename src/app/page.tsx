@@ -12,13 +12,9 @@ import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
 
 export default function HomePage() {
-  const { darkMode, toggleDarkMode, initTheme } = useThemeStore();
+  const { darkMode, toggleDarkMode } = useThemeStore();
   const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
-
-  useEffect(() => {
-    initTheme();
-  }, [initTheme]);
 
   useEffect(() => {
     const getUser = async () => {
@@ -47,13 +43,17 @@ export default function HomePage() {
           <Link href="/about" className="text-sm">
             About
           </Link>
+          {user && (
+            <Link href="/dashboard" className="text-sm">
+              Dashboard
+            </Link>
+          )}
           {user ? (
-            <div>
-              Hello, {user.email}
+            <div className="flex gap-4 items-center">
+              <p className="text-sm">Hello, {user.email}</p>
               <Button
                 variant="outline"
                 size="sm"
-                className="ms-4"
                 onClick={async () => {
                   await supabase.auth.signOut();
                   window.location.reload();
