@@ -6,14 +6,32 @@ import { Sparkles, Flame, Apple, SunMoon } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useThemeStore } from "@/stores/useThemeStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient";
+import { User } from "@supabase/supabase-js";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
   const { darkMode, toggleDarkMode, initTheme } = useThemeStore();
+  const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     initTheme();
   }, [initTheme]);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data, error } = await supabase.auth.getUser();
+
+      if (error) {
+        console.error("Error getting user:", error.message);
+      } else {
+        setUser(data.user);
+      }
+    };
+    getUser();
+  }, []);
 
   return (
     <main className="min-h-screen bg-white dark:bg-gray-950">
@@ -29,11 +47,28 @@ export default function HomePage() {
           <Link href="/about" className="text-sm">
             About
           </Link>
-          <Link href="/signin">
-            <Button variant="outline" size="sm">
-              Log In
-            </Button>
-          </Link>
+          {user ? (
+            <div>
+              Hello, {user.email}
+              <Button
+                variant="outline"
+                size="sm"
+                className="ms-4"
+                onClick={async () => {
+                  await supabase.auth.signOut();
+                  window.location.reload();
+                }}
+              >
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <Link href="/login">
+              <Button variant="outline" size="sm">
+                Log In
+              </Button>
+            </Link>
+          )}
           <Button variant="outline" size="sm">
             Demo
           </Button>
