@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/card";
 import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 const chartData = [
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+  { browser: "safari", visitors: 200, fill: "var(--chart-1)" },
 ];
 
 const chartConfig = {

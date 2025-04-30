@@ -17,9 +17,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { useEffect, useState } from "react";
+import { GetCaloriesSumForToday } from "@/lib/db/dashboard/GetCaloriesSumForToday";
+import { useFoodInsertStore } from "@/stores/dashboard/useFoodInsertStore";
 const chartData = [
-  { browser: "safari", visitors: 400, fill: "var(--color-safari)" },
+  { browser: "safari", visitors: 400, fill: "var(--chart-1)" },
 ];
 
 const chartConfig = {
@@ -32,7 +40,18 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function RadialProgressChart() {
+export function CaloriesRadialChart() {
+  const [caloriesSum, setCaloriesSum] = useState(0);
+  const { refreshKeyTodaysFood } = useFoodInsertStore();
+
+  useEffect(() => {
+    const fetchTodaysCaloriesSum = async () => {
+      const totalCalories = await GetCaloriesSumForToday();
+      setCaloriesSum(totalCalories);
+    };
+    fetchTodaysCaloriesSum();
+  }, [refreshKeyTodaysFood]);
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
@@ -47,7 +66,7 @@ export function RadialProgressChart() {
           <RadialBarChart
             data={chartData}
             startAngle={0}
-            endAngle={200}
+            endAngle={(caloriesSum / 3000) * 360}
             innerRadius={80}
             outerRadius={110}
           >
@@ -58,7 +77,11 @@ export function RadialProgressChart() {
               className="first:fill-muted last:fill-background"
               polarRadius={[86, 74]}
             />
-            <RadialBar dataKey="visitors" background cornerRadius={10} />
+            <RadialBar dataKey="visitors" cornerRadius={10} />
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
               <Label
                 content={({ viewBox }) => {
@@ -75,14 +98,14 @@ export function RadialProgressChart() {
                           y={viewBox.cy}
                           className="fill-foreground text-4xl font-bold"
                         >
-                          {chartData[0].visitors.toLocaleString()}
+                          {3000 - caloriesSum}
                         </tspan>
                         <tspan
                           x={viewBox.cx}
                           y={(viewBox.cy || 0) + 24}
                           className="fill-muted-foreground"
                         >
-                          Calories
+                          Remaining
                         </tspan>
                       </text>
                     );

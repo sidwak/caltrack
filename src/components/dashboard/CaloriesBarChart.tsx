@@ -17,6 +17,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useEffect, useState } from "react";
+import {
+  CaloriesPerDay,
+  GetCaloriesSumForLast6Days,
+} from "@/lib/db/dashboard/GetCaloriesSumForLast6Days";
 const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },
@@ -33,7 +38,19 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function BarProgressChart() {
+export function CaloriesBarChart() {
+  const [caloriesHistoryData, setCaloriesHistoryData] = useState<
+    CaloriesPerDay[]
+  >([]);
+
+  useEffect(() => {
+    const fetchLast6DaysCaloriesData = async () => {
+      const data = await GetCaloriesSumForLast6Days();
+      setCaloriesHistoryData(data);
+    };
+    fetchLast6DaysCaloriesData();
+  }, []);
+
   return (
     <Card>
       <CardHeader>
@@ -44,24 +61,23 @@ export function BarProgressChart() {
         <ChartContainer config={chartConfig}>
           <BarChart
             accessibilityLayer
-            data={chartData}
+            data={caloriesHistoryData}
             margin={{
               top: 20,
             }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="day"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="desktop" fill="var(--chart-1)" radius={8}>
+            <Bar dataKey="Calories" fill="var(--chart-1)" radius={8}>
               <LabelList
                 position="top"
                 offset={12}
