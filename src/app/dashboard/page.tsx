@@ -1,7 +1,10 @@
 "use client";
 
+import AddWeightCard from "@/components/dashboard/AddWeightCard";
 import { BarProgressChart } from "@/components/dashboard/BarProgressChart";
 import { RadialProgressChart } from "@/components/dashboard/RadialProgressChart";
+import { WeightLineChart } from "@/components/dashboard/WeightLineChart";
+import { WeightRadialChart } from "@/components/dashboard/WeightRadialChart";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -149,11 +152,11 @@ export default function DashboardPage() {
                 )}
               </div>
               <div className="flex gap-3">
-                <div className="grid gap-2">
+                <div className="grow grid gap-2">
                   <Label htmlFor="foodQuan">Quantity</Label>
                   <Input id="foodQuan" type="number" placeholder="1" required />
                 </div>
-                <div className="grid gap-2">
+                <div className="grow grid gap-2">
                   <Label htmlFor="foodCal">Calories</Label>
                   <Input
                     id="foodCal"
@@ -173,6 +176,9 @@ export default function DashboardPage() {
         </Card>
         <RadialProgressChart />
         <BarProgressChart />
+        <AddWeightCard />
+        <WeightLineChart />
+        <WeightRadialChart />
       </div>
     </div>
   );
