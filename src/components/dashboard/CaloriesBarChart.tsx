@@ -22,6 +22,7 @@ import {
   CaloriesPerDay,
   GetCaloriesSumForLast6Days,
 } from "@/lib/db/dashboard/GetCaloriesSumForLast6Days";
+import { useFoodInsertStore } from "@/stores/dashboard/useFoodInsertStore";
 const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },
@@ -39,6 +40,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function CaloriesBarChart() {
+  const { refreshKeyTodaysFood } = useFoodInsertStore();
+
   const [caloriesHistoryData, setCaloriesHistoryData] = useState<
     CaloriesPerDay[]
   >([]);
@@ -49,7 +52,7 @@ export function CaloriesBarChart() {
       setCaloriesHistoryData(data);
     };
     fetchLast6DaysCaloriesData();
-  }, []);
+  }, [refreshKeyTodaysFood]);
 
   return (
     <Card>

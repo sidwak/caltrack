@@ -195,7 +195,7 @@ export default function AddFoodCard() {
             <div>{totalCalories} kcal</div>
           </div>
           <Button
-            variant="outline"
+            variant="default"
             size="lg"
             disabled={loading}
             onClick={handleAddFoodClick}

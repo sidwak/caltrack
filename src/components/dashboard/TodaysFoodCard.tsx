@@ -78,7 +78,7 @@ export default function TodaysFoodCard() {
               </div>
             ))
           ) : (
-            <p className="text-sm text-gray-400">No entries yet</p>
+            <p className="text-sm text-gray-400">No foods eaten today</p>
           )}
         </div>
       </CardContent>

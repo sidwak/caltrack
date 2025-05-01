@@ -17,6 +17,12 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useEffect, useState } from "react";
+import {
+  GetWeightForLast6Days,
+  WeightLog,
+} from "@/lib/db/dashboard/GetWeightForLast6Days";
+import { useWeightInsertStore } from "@/stores/dashboard/useWeightInsertStore";
 const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
   { month: "February", desktop: 305, mobile: 200 },
@@ -38,36 +44,48 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function WeightLineChart() {
+  const { refreshKeyTodaysWeight } = useWeightInsertStore();
+
+  const [weightHistoryData, setWeightHistoryData] = useState<WeightLog[]>([]);
+
+  useEffect(() => {
+    const fetchWeightForLast6Days = async () => {
+      const data = await GetWeightForLast6Days();
+      setWeightHistoryData(data);
+    };
+    fetchWeightForLast6Days();
+  }, [refreshKeyTodaysWeight]);
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Line Chart - Dots</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Weight History</CardTitle>
+        <CardDescription>Your weight since last 6 days</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
           <LineChart
             accessibilityLayer
-            data={chartData}
+            data={weightHistoryData}
             margin={{
+              top: 10,
               left: 12,
               right: 12,
             }}
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="day"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="desktop"
+              dataKey="weight"
               type="natural"
               stroke="var(--chart-1)"
               strokeWidth={2}
