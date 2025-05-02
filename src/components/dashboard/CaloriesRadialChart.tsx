@@ -45,6 +45,7 @@ export function CaloriesRadialChart() {
   const [caloriesSum, setCaloriesSum] = useState(0);
   const [caloriesTarget, setCaloriesTarget] = useState(3000);
   const { refreshKeyTodaysFood } = useFoodInsertStore();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchTodaysCaloriesSum = async () => {
@@ -63,6 +64,12 @@ export function CaloriesRadialChart() {
     fetchUserCalorieTarget();
   }, []);
 
+  useEffect(() => {
+    if (caloriesSum !== 0 && caloriesTarget !== 3000) {
+      setLoading(false);
+    }
+  }, [caloriesSum, caloriesTarget]);
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
@@ -70,62 +77,66 @@ export function CaloriesRadialChart() {
         <CardDescription>Your calories progress today</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[184px]"
-        >
-          <RadialBarChart
-            data={chartData}
-            startAngle={0}
-            endAngle={(caloriesSum / caloriesTarget) * 360}
-            innerRadius={80}
-            outerRadius={110}
+        {loading! ? (
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square max-h-[184px]"
           >
-            <PolarGrid
-              gridType="circle"
-              radialLines={false}
-              stroke="none"
-              className="first:fill-muted last:fill-background"
-              polarRadius={[86, 74]}
-            />
-            <RadialBar dataKey="visitors" cornerRadius={10} />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
+            <RadialBarChart
+              data={chartData}
+              startAngle={0}
+              endAngle={(caloriesSum / caloriesTarget) * 360}
+              innerRadius={80}
+              outerRadius={110}
+            >
+              <PolarGrid
+                gridType="circle"
+                radialLines={false}
+                stroke="none"
+                className="first:fill-muted last:fill-background"
+                polarRadius={[86, 74]}
+              />
+              <RadialBar dataKey="visitors" cornerRadius={10} />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+                <Label
+                  content={({ viewBox }) => {
+                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                      return (
+                        <text
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-4xl font-bold"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
                         >
-                          {caloriesTarget - caloriesSum}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Remaining
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </PolarRadiusAxis>
-          </RadialBarChart>
-        </ChartContainer>
+                          <tspan
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            className="fill-foreground text-4xl font-bold"
+                          >
+                            {caloriesTarget - caloriesSum}
+                          </tspan>
+                          <tspan
+                            x={viewBox.cx}
+                            y={(viewBox.cy || 0) + 24}
+                            className="fill-muted-foreground"
+                          >
+                            Remaining
+                          </tspan>
+                        </text>
+                      );
+                    }
+                  }}
+                />
+              </PolarRadiusAxis>
+            </RadialBarChart>
+          </ChartContainer>
+        ) : (
+          <div>loading...</div>
+        )}
       </CardContent>
     </Card>
   );

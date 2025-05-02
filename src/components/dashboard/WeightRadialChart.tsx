@@ -23,6 +23,7 @@ import {
   GetUserGoalWeight,
   GetUserLatestWeightLog,
 } from "@/lib/db/dashboard/settings/ProfileDataQueries";
+import { useWeightInsertStore } from "@/stores/dashboard/useWeightInsertStore";
 const chartData = [
   { browser: "safari", visitors: 200, fill: "var(--chart-1)" },
 ];
@@ -38,6 +39,8 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function WeightRadialChart() {
+  const { refreshKeyTodaysWeight } = useWeightInsertStore();
+
   const [userGoalWeight, setUserGoalWeight] = useState(60);
   const [userLatestWeight, setUserLatestWeight] = useState(0);
 
@@ -54,7 +57,7 @@ export function WeightRadialChart() {
         else setUserLatestWeight(0);
       })
       .catch((err) => alert(err.message));
-  }, []);
+  }, [refreshKeyTodaysWeight]);
 
   return (
     <Card className="flex flex-col">
