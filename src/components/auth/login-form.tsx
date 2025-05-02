@@ -85,7 +85,7 @@ export function LoginForm({
               </div>
               <div className="flex flex-col gap-3">
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Loading..." : "Login"}
+                  {loading ? "Logging..." : "Login"}
                 </Button>
                 <Button variant="outline" className="w-full" disabled={loading}>
                   Login with Google

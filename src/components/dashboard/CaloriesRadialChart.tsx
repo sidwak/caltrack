@@ -26,6 +26,7 @@ import {
 import { useEffect, useState } from "react";
 import { GetCaloriesSumForToday } from "@/lib/db/dashboard/GetCaloriesSumForToday";
 import { useFoodInsertStore } from "@/stores/dashboard/useFoodInsertStore";
+import { GetUserCaloriesTarget } from "@/lib/db/dashboard/settings/ProfileDataQueries";
 const chartData = [
   { browser: "safari", visitors: 400, fill: "var(--chart-1)" },
 ];
@@ -42,6 +43,7 @@ const chartConfig = {
 
 export function CaloriesRadialChart() {
   const [caloriesSum, setCaloriesSum] = useState(0);
+  const [caloriesTarget, setCaloriesTarget] = useState(3000);
   const { refreshKeyTodaysFood } = useFoodInsertStore();
 
   useEffect(() => {
@@ -51,6 +53,15 @@ export function CaloriesRadialChart() {
     };
     fetchTodaysCaloriesSum();
   }, [refreshKeyTodaysFood]);
+
+  useEffect(() => {
+    const fetchUserCalorieTarget = async () => {
+      const value = await GetUserCaloriesTarget();
+      console.log(value.calorie_target);
+      setCaloriesTarget(value.calorie_target);
+    };
+    fetchUserCalorieTarget();
+  }, []);
 
   return (
     <Card className="flex flex-col">
@@ -66,7 +77,7 @@ export function CaloriesRadialChart() {
           <RadialBarChart
             data={chartData}
             startAngle={0}
-            endAngle={(caloriesSum / 3000) * 360}
+            endAngle={(caloriesSum / caloriesTarget) * 360}
             innerRadius={80}
             outerRadius={110}
           >
@@ -98,7 +109,7 @@ export function CaloriesRadialChart() {
                           y={viewBox.cy}
                           className="fill-foreground text-4xl font-bold"
                         >
-                          {3000 - caloriesSum}
+                          {caloriesTarget - caloriesSum}
                         </tspan>
                         <tspan
                           x={viewBox.cx}

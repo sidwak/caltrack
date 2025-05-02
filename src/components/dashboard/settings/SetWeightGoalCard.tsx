@@ -9,28 +9,28 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  GetUserCaloriesTarget,
+  GetUserGoalWeight,
   UpdateUserProfileData,
 } from "@/lib/db/dashboard/settings/ProfileDataQueries";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function SetCaloriesGoalCard() {
-  const [caloriesValue, setCaloriesValue] = useState(2000);
+export default function SetWeightGoalCard() {
+  const [weightValue, setWeightValue] = useState(60);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const fetchUserCalorieTarget = async () => {
-      const value = await GetUserCaloriesTarget();
-      setCaloriesValue(value.calorie_target);
+    const fetchUserGoalWeight = async () => {
+      const value = await GetUserGoalWeight();
+      setWeightValue(value.goal_weight);
     };
-    fetchUserCalorieTarget();
+    fetchUserGoalWeight();
   });
 
   const handleUpdateDataClick = async () => {
     try {
       setLoading(true);
-      await UpdateUserProfileData({ calorie_target: caloriesValue });
+      await UpdateUserProfileData({ goal_weight: weightValue });
     } catch (error: any) {
       alert(error.message);
     } finally {
@@ -41,8 +41,8 @@ export default function SetCaloriesGoalCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Daily Calories Target</CardTitle>
-        <CardDescription>Set your daily calories goal</CardDescription>
+        <CardTitle>Weight Target</CardTitle>
+        <CardDescription>Set your weight goal</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-stretch justify-between">
@@ -51,22 +51,22 @@ export default function SetCaloriesGoalCard() {
               variant="outline"
               size="icon"
               onClick={() => {
-                setCaloriesValue(caloriesValue - 100);
+                setWeightValue(weightValue - 1);
               }}
             >
               <Minus />
             </Button>
           </div>
           <div className="flex flex-col items-center justify-center">
-            <div className="font-bold text-5xl">{caloriesValue}</div>
-            <div className="text-sm text-muted-foreground">Caloreis/Day</div>
+            <div className="font-bold text-5xl">{weightValue}</div>
+            <div className="text-sm text-muted-foreground">KG</div>
           </div>
           <div className="w-20 flex items-center justify-end">
             <Button
               variant="outline"
               size="icon"
               onClick={() => {
-                setCaloriesValue(caloriesValue + 100);
+                setWeightValue(weightValue + 1);
               }}
             >
               <Plus />

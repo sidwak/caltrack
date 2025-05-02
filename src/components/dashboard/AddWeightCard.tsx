@@ -99,7 +99,6 @@ export default function AddWeightCard() {
             size="lg"
             disabled={loading}
             onClick={handleLogWeightClick}
-            c
             className="w-full"
           >
             {loading ? "Logging..." : "Measure Weight"}
