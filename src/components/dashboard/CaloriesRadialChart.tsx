@@ -58,7 +58,6 @@ export function CaloriesRadialChart() {
   useEffect(() => {
     const fetchUserCalorieTarget = async () => {
       const value = await GetUserCaloriesTarget();
-      console.log(value.calorie_target);
       setCaloriesTarget(value.calorie_target);
     };
     fetchUserCalorieTarget();
@@ -77,7 +76,7 @@ export function CaloriesRadialChart() {
         <CardDescription>Your calories progress today</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        {loading! ? (
+        {loading === false ? (
           <ChartContainer
             config={chartConfig}
             className="mx-auto aspect-square max-h-[184px]"
@@ -135,7 +134,9 @@ export function CaloriesRadialChart() {
             </RadialBarChart>
           </ChartContainer>
         ) : (
-          <div>loading...</div>
+          <div className="flex items-center justify-center w-full h-full rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--background)]">
+            Loading...
+          </div>
         )}
       </CardContent>
     </Card>
