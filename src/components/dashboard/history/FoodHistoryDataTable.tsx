@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import FoodHistoryTable from "./FoodHistoryTable";
 
 export default function FoodHistoryDataTable() {
-  const [historyData, setHistoryData] = useState([]);
+  const [historyData, setHistoryData] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchFoodEntriesSegmented = async () => {
@@ -16,7 +16,7 @@ export default function FoodHistoryDataTable() {
   }, []);
 
   return (
-    <div className="m-6 rounded-2xl border-2">
+    <div className="rounded-2xl border-2">
       <FoodHistoryTable entries={historyData} />
     </div>
   );

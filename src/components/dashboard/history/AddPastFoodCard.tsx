@@ -15,6 +15,7 @@ import { InsertNewFoodEntry } from "@/lib/db/dashboard/InsertNewFoodEntry";
 import { useFoodInsertStore } from "@/stores/dashboard/useFoodInsertStore";
 import { DefinedFood } from "@/types/food";
 import { useEffect, useRef, useState } from "react";
+import { DatePicker } from "./DatePicker";
 
 const today = new Date().toISOString().split("T")[0];
 
@@ -135,7 +136,7 @@ export default function AddFoodCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add Food</CardTitle>
+        <CardTitle>Add Past Food</CardTitle>
         <CardDescription>Add new Food you ate today</CardDescription>
       </CardHeader>
       <CardContent>
@@ -191,6 +192,10 @@ export default function AddFoodCard() {
               />
             </div>
           </div>
+          <div className="grow grid gap-2">
+            <Label>Date</Label>
+            <DatePicker />
+          </div>
         </div>
         <div className="flex w-full mt-4 items-center justify-between">
           <div className="tt text-sm text-muted-foreground">
@@ -209,8 +214,4 @@ export default function AddFoodCard() {
       </CardContent>
     </Card>
   );
-}
-
-function useFoodEntryStore(): { triggerRefresh: any } {
-  throw new Error("Function not implemented.");
 }

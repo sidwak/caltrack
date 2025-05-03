@@ -43,7 +43,7 @@ const chartConfig = {
 
 export function CaloriesRadialChart() {
   const [caloriesSum, setCaloriesSum] = useState(0);
-  const [caloriesTarget, setCaloriesTarget] = useState(3000);
+  const [caloriesTarget, setCaloriesTarget] = useState(0);
   const { refreshKeyTodaysFood } = useFoodInsertStore();
   const [loading, setLoading] = useState(true);
 
@@ -64,7 +64,7 @@ export function CaloriesRadialChart() {
   }, []);
 
   useEffect(() => {
-    if (caloriesSum !== 0 && caloriesTarget !== 3000) {
+    if (caloriesTarget !== 0) {
       setLoading(false);
     }
   }, [caloriesSum, caloriesTarget]);
