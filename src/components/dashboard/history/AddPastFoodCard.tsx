@@ -17,8 +17,6 @@ import { DefinedFood } from "@/types/food";
 import { useEffect, useRef, useState } from "react";
 import { DatePicker } from "./DatePicker";
 
-const today = new Date().toISOString().split("T")[0];
-
 export default function AddFoodCard() {
   const { triggerRefreshTodaysFoodCard } = useFoodInsertStore();
 
@@ -29,6 +27,7 @@ export default function AddFoodCard() {
   const [quantityMultiplier, setQuantityMultiplier] = useState(1);
   const [caloriesValue, setCaloriesValue] = useState(0);
   const [totalCalories, setTotalCalories] = useState(0);
+  const [selectedDate, setSelectedDate] = useState<string>();
   const [definedFoodList, setDefinedFoodList] = useState<DefinedFood[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -120,7 +119,7 @@ export default function AddFoodCard() {
         food_name: foodNameValue,
         total_cal: totalCalories,
         quantity: quantityValue,
-        entry_date: today,
+        entry_date: selectedDate as string,
       });
       setFoodNameValue("");
       setCaloriesValue(0);
@@ -168,7 +167,7 @@ export default function AddFoodCard() {
               </div>
             )}
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-end">
             <div className="grow grid gap-2">
               <Label htmlFor="foodQuan">Quantity (u, g, ml)</Label>
               <Input
@@ -194,7 +193,11 @@ export default function AddFoodCard() {
           </div>
           <div className="grow grid gap-2">
             <Label>Date</Label>
-            <DatePicker />
+            <DatePicker
+              onDateChange={(date) =>
+                setSelectedDate(date?.toISOString().split("T")[0])
+              }
+            />
           </div>
         </div>
         <div className="flex w-full mt-4 items-center justify-between">

@@ -30,6 +30,10 @@ const chartData = [
   { month: "April", desktop: 73, mobile: 190 },
   { month: "May", desktop: 209, mobile: 130 },
   { month: "June", desktop: 214, mobile: 140 },
+  { month: "March", desktop: 237, mobile: 120 },
+  { month: "April", desktop: 73, mobile: 190 },
+  { month: "May", desktop: 209, mobile: 130 },
+  { month: "June", desktop: 214, mobile: 140 },
 ];
 
 const chartConfig = {
@@ -43,7 +47,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function WeightLineChart() {
+export function WeightBigLineChart() {
   const { refreshKeyTodaysWeight } = useWeightInsertStore();
 
   const [weightHistoryData, setWeightHistoryData] = useState<WeightLog[]>([]);
@@ -67,7 +71,7 @@ export function WeightLineChart() {
         <ChartContainer config={chartConfig}>
           <LineChart
             accessibilityLayer
-            data={weightHistoryData}
+            data={chartData}
             margin={{
               top: 10,
               left: 17,
@@ -76,7 +80,7 @@ export function WeightLineChart() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="day"
+              dataKey="month"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
@@ -86,7 +90,7 @@ export function WeightLineChart() {
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="weight"
+              dataKey="desktop"
               type="natural"
               stroke="var(--chart-1)"
               strokeWidth={2}

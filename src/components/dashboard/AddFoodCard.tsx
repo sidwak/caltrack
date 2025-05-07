@@ -167,7 +167,7 @@ export default function AddFoodCard() {
               </div>
             )}
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 items-end">
             <div className="grow grid gap-2">
               <Label htmlFor="foodQuan">Quantity (u, g, ml)</Label>
               <Input
@@ -180,7 +180,16 @@ export default function AddFoodCard() {
               />
             </div>
             <div className="grow grid gap-2">
-              <Label htmlFor="foodCal">Calories</Label>
+              <div className="flex justify-between">
+                <Label htmlFor="foodCal">Calories</Label>
+                <Label
+                  className={`text-muted-foreground blo ${
+                    totalCalories === 0 ? "hidden" : ""
+                  }`}
+                >
+                  Total: {totalCalories}
+                </Label>
+              </div>
               <Input
                 id="foodCal"
                 type="number"

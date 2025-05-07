@@ -24,6 +24,7 @@ export default function AddPastWeightCard() {
   const [timeValue, setTimeValue] = useState<
     "MORNING" | "AFTERNOON" | "EVENING" | "NIGHT"
   >("MORNING");
+  const [selectedDate, setSelectedDate] = useState<Date>();
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -37,7 +38,11 @@ export default function AddPastWeightCard() {
     }
     try {
       setLoading(true);
-      const result = await InsertOrUpdateTodaysWeight(weightValue, timeValue);
+      const result = await InsertOrUpdateTodaysWeight(
+        weightValue,
+        timeValue,
+        selectedDate
+      );
       console.log(result);
     } catch (error: any) {
       alert(error.message);
@@ -95,7 +100,7 @@ export default function AddPastWeightCard() {
           </div>
           <div className="grow grid gap-2">
             <Label>Date</Label>
-            <DatePicker />
+            <DatePicker onDateChange={(date) => setSelectedDate(date)} />
           </div>
         </div>
         <div className="flex w-full mt-4 items-center justify-center">
