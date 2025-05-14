@@ -7,7 +7,6 @@ export function cn(...inputs: ClassValue[]) {
 
 export function toLocalISOString(date: Date): string {
   const pad = (n: number): string => n.toString().padStart(2, "0");
-
   const year = date.getFullYear();
   const month = pad(date.getMonth() + 1); // Months are zero-indexed
   const day = pad(date.getDate());

@@ -63,7 +63,7 @@ export function WeightLineChart() {
         <CardTitle>Weight History</CardTitle>
         <CardDescription>Your weight since last 6 days</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col justify-end h-full">
         <ChartContainer config={chartConfig}>
           <LineChart
             accessibilityLayer

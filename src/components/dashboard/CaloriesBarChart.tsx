@@ -60,13 +60,13 @@ export function CaloriesBarChart() {
         <CardTitle>Bar Chart - Label</CardTitle>
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-col justify-end h-full">
         <ChartContainer config={chartConfig}>
           <BarChart
             accessibilityLayer
             data={caloriesHistoryData}
             margin={{
-              top: 20,
+              top: 25,
             }}
           >
             <CartesianGrid vertical={false} />

@@ -36,7 +36,11 @@ export default function AddWeightCard() {
     }
     try {
       setLoading(true);
-      const result = await InsertOrUpdateTodaysWeight(weightValue, timeValue);
+      const result = await InsertOrUpdateTodaysWeight(
+        weightValue,
+        timeValue,
+        new Date()
+      );
       console.log(result);
     } catch (error: any) {
       alert(error.message);

@@ -4,7 +4,7 @@ import { toLocalISOString } from "@/lib/utils";
 export async function InsertOrUpdateTodaysWeight(
   weight: number,
   loggedAt: "MORNING" | "AFTERNOON" | "EVENING" | "NIGHT",
-  date?: Date
+  date: Date
 ) {
   const {
     data: { user },
@@ -16,11 +16,7 @@ export async function InsertOrUpdateTodaysWeight(
   }
 
   const userId = user.id;
-  let today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
-
-  if (date !== null) {
-    today = toLocalISOString(date!).split("T")[0];
-  }
+  const today = toLocalISOString(date).split("T")[0];
 
   const { data: existing, error: fetchError } = await supabase
     .from("weight_logs")
@@ -32,10 +28,8 @@ export async function InsertOrUpdateTodaysWeight(
 
   if (fetchError) throw new Error("Failed to check existing weight log");
 
-  let insertDate = new Date().toISOString();
-  if (date !== null) {
-    insertDate = toLocalISOString(date!) as string;
-  }
+  const insertDate = toLocalISOString(date) as string;
+
   if (existing) {
     // 🔁 Update the existing entry
     const { error: updateError } = await supabase
