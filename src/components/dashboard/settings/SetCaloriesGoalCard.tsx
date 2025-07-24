@@ -31,8 +31,10 @@ export default function SetCaloriesGoalCard() {
     try {
       setLoading(true);
       await UpdateUserProfileData({ calorie_target: caloriesValue });
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     } finally {
       setLoading(false);
     }

@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 
 type FoodEntry = {

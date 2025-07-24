@@ -13,7 +13,6 @@ import { Label } from "@/components/ui/label";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { InsertOrUpdateTodaysWeight } from "@/lib/db/dashboard/InsertOrUpdateTodaysWeight";
 import { useWeightInsertStore } from "@/stores/dashboard/useWeightInsertStore";
-import { Bold, Italic, Underline } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DatePicker } from "./DatePicker";
 
@@ -41,11 +40,13 @@ export default function AddPastWeightCard() {
       const result = await InsertOrUpdateTodaysWeight(
         weightValue,
         timeValue,
-        selectedDate
+        selectedDate!
       );
       console.log(result);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     } finally {
       triggerRefreshTodaysWeight();
       setLoading(false);
@@ -79,7 +80,9 @@ export default function AddPastWeightCard() {
               id="timeInput"
               className="w-full overflow-x-auto"
               value={timeValue}
-              onValueChange={(e: any) => setTimeValue(e)}
+              onValueChange={(
+                e: "MORNING" | "AFTERNOON" | "EVENING" | "NIGHT"
+              ) => setTimeValue(e)}
             >
               <ToggleGroupItem value="MORNING" aria-label="Toggle bold">
                 <p>Morning</p>

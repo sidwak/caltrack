@@ -1,7 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
 import { toLocalISOString } from "@/lib/utils";
 import { useHistoryPageStore } from "@/stores/dashboard/history/useHistoryPageStore";
-import { addDays, subDays } from "date-fns";
+import { subDays } from "date-fns";
 
 /**
  * Fetch food_entries for a segment of days (5 days per segment)

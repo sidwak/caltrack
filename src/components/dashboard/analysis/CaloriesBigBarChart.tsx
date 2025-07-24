@@ -1,13 +1,11 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -18,17 +16,12 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useEffect, useState } from "react";
-import { GetCaloriesSumForLast6Days } from "@/lib/db/dashboard/GetCaloriesSumForLast6Days";
-import { useFoodInsertStore } from "@/stores/dashboard/useFoodInsertStore";
-import { DatePicker } from "../history/DatePicker";
-import { Label } from "@/components/ui/label";
-import { DatePickerWithRange } from "./DatePickerWithRange";
 import { useAnalysisPageStore } from "@/stores/dashboard/analysis/useAnalysisPageStore";
 import {
   CaloriesPerDate,
   GetCaloriesSumForDateRange,
 } from "@/lib/db/dashboard/CalorieQueries";
-const chartData = [
+/* const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },
   { month: "March", desktop: 237 },
@@ -40,7 +33,7 @@ const chartData = [
   { month: "May", desktop: 209 },
   { month: "June", desktop: 214 },
 ];
-
+ */
 const chartConfig = {
   desktop: {
     label: "Desktop",

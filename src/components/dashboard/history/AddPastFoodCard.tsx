@@ -124,8 +124,10 @@ export default function AddFoodCard() {
       setFoodNameValue("");
       setCaloriesValue(0);
       setQuantityValue("");
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     } finally {
       triggerRefreshTodaysFoodCard();
       setLoading(false);

@@ -1,13 +1,11 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -18,12 +16,10 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useEffect, useState } from "react";
-import {
-  GetWeightForLast6Days,
-  WeightLog,
-} from "@/lib/db/dashboard/GetWeightForLast6Days";
+import { GetWeightForLast6Days } from "@/lib/db/dashboard/GetWeightForLast6Days";
 import { useWeightInsertStore } from "@/stores/dashboard/useWeightInsertStore";
-const chartData = [
+import { WeightLog } from "@/lib/db/dashboard/WeightQueries";
+/* const chartData = [
   { month: "January", desktop: 186, mobile: 80 },
   { month: "February", desktop: 305, mobile: 200 },
   { month: "March", desktop: 237, mobile: 120 },
@@ -31,7 +27,7 @@ const chartData = [
   { month: "May", desktop: 209, mobile: 130 },
   { month: "June", desktop: 214, mobile: 140 },
 ];
-
+ */
 const chartConfig = {
   desktop: {
     label: "Desktop",

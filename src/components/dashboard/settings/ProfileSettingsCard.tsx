@@ -16,7 +16,6 @@ import {
   ProfileDataType,
   UpdateUserProfileData,
 } from "@/lib/db/dashboard/settings/ProfileDataQueries";
-import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function ProfileSettingsCard() {
@@ -44,10 +43,13 @@ export default function ProfileSettingsCard() {
   const handleUpdateDataClick = async () => {
     try {
       setLoading(true);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { email, ...profileDataWithoutEmail } = profileData;
       await UpdateUserProfileData(profileDataWithoutEmail);
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     } finally {
       setLoading(false);
     }

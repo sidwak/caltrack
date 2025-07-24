@@ -6,6 +6,7 @@ import FoodHistoryTable from "./FoodHistoryTable";
 import { Button } from "@/components/ui/button";
 
 export default function FoodHistoryDataTable() {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [historyData, setHistoryData] = useState<any[]>([]);
   const [loadCounter, setLoadCounter] = useState(1);
 
@@ -13,8 +14,10 @@ export default function FoodHistoryDataTable() {
     const fetchFoodEntriesSegmented = async () => {
       const data = await GetFoodEntriesSegmented(loadCounter);
       setHistoryData((prevData) => {
-        const existingIds = new Set(prevData.map(entry => entry.id));
-        const uniqueNewData = data.filter(entry => !existingIds.has(entry.id));
+        const existingIds = new Set(prevData.map((entry) => entry.id));
+        const uniqueNewData = data.filter(
+          (entry) => !existingIds.has(entry.id)
+        );
         return [...prevData, ...uniqueNewData];
       });
       console.log(data);

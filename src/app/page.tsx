@@ -9,12 +9,11 @@ import { useThemeStore } from "@/stores/useThemeStore";
 import { useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 import { User } from "@supabase/supabase-js";
-import { useRouter } from "next/navigation";
 
 export default function HomePage() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { darkMode, toggleDarkMode } = useThemeStore();
   const [user, setUser] = useState<User | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     const getUser = async () => {

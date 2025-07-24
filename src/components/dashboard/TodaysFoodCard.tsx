@@ -50,7 +50,7 @@ export default function TodaysFoodCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Today's Items</CardTitle>
+        <CardTitle>Today&apos;s Items</CardTitle>
         <CardDescription>Food you’ve eaten today</CardDescription>
       </CardHeader>
       <CardContent>

@@ -10,6 +10,6 @@ type HistoryPageStore = {
 export const useHistoryPageStore = create<HistoryPageStore>((set) => ({
   startDate: new Date(),
   endDate: new Date(),
-  setStartDate: (newStartDate: Date) => set((state) => ({startDate: newStartDate})),
-  setEndDate: (newEndDate: Date) => set((state) => ({endDate: newEndDate}))
+  setStartDate: (newStartDate: Date) => set(() => ({startDate: newStartDate})),
+  setEndDate: (newEndDate: Date) => set(() => ({endDate: newEndDate}))
 }))

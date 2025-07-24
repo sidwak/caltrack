@@ -5,16 +5,6 @@ import { CaloriesRadialChart } from "@/components/dashboard/CaloriesRadialChart"
 import TodaysFoodCard from "@/components/dashboard/TodaysFoodCard";
 import { WeightLineChart } from "@/components/dashboard/WeightLineChart";
 import { WeightRadialChart } from "@/components/dashboard/WeightRadialChart";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 export default function DashboardPage() {
   return (

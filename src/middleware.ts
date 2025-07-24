@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
     // Refresh the session if needed
     const {
       data: { user },
-      error: userError,
+      //error: userError,
     } = await supabase.auth.getUser();
     // Define protected routes
     const protectedRoutes = ["/dashboard"];
@@ -26,7 +26,8 @@ export async function middleware(request: NextRequest) {
     }
 
     return response;
-  } catch (e: any) {
+  } catch (e: unknown) {
+    if (e instanceof Error)
     return NextResponse.next();
   }
 }

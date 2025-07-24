@@ -38,7 +38,7 @@ export async function GetWeightForDateRange(
 
   const dates: string[] = [];
   const days: string[] = [];
-  let currentDate = new Date(startDate);
+  const currentDate = new Date(startDate);
   const lastDate = new Date(endDate);
 
   while (currentDate <= lastDate) {

@@ -1,13 +1,11 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts";
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -23,14 +21,14 @@ import {
   GetCaloriesSumForLast6Days,
 } from "@/lib/db/dashboard/GetCaloriesSumForLast6Days";
 import { useFoodInsertStore } from "@/stores/dashboard/useFoodInsertStore";
-const chartData = [
+/* const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },
   { month: "March", desktop: 237 },
   { month: "April", desktop: 73 },
   { month: "May", desktop: 209 },
   { month: "June", desktop: 214 },
-];
+]; */
 
 const chartConfig = {
   desktop: {

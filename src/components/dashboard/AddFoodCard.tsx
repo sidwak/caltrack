@@ -124,8 +124,10 @@ export default function AddFoodCard() {
       setFoodNameValue("");
       setCaloriesValue(0);
       setQuantityValue("");
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     } finally {
       triggerRefreshTodaysFoodCard();
       setLoading(false);
@@ -218,8 +220,4 @@ export default function AddFoodCard() {
       </CardContent>
     </Card>
   );
-}
-
-function useFoodEntryStore(): { triggerRefresh: any } {
-  throw new Error("Function not implemented.");
 }

@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import { toLocalISOString } from "@/lib/utils";
+import { WeightLog } from "./WeightQueries";
 
 export async function GetWeightForLast6Days(): Promise<WeightLog[]> {
   const {

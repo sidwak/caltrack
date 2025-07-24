@@ -9,6 +9,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { darkMode, toggleDarkMode, initTheme } = useThemeStore();
 
   useEffect(() => {

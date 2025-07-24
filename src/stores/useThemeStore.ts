@@ -1,7 +1,5 @@
 // store/useThemeStore.ts
 import { create } from 'zustand';
-import { useEffect } from 'react';
-
 interface ThemeState {
   darkMode: boolean;
   toggleDarkMode: () => void;

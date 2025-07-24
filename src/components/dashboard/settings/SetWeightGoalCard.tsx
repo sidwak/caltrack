@@ -31,8 +31,10 @@ export default function SetWeightGoalCard() {
     try {
       setLoading(true);
       await UpdateUserProfileData({ goal_weight: weightValue });
-    } catch (error: any) {
-      alert(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        alert(error.message);
+      }
     } finally {
       setLoading(false);
     }

@@ -15,6 +15,6 @@ export const useAnalysisPageStore = create<AnalysisPageStore>((set) => ({
   refreshKeyDateRange: 0,
   triggerRefreshDateRange: () =>
     set((state) => ({ refreshKeyDateRange: state.refreshKeyDateRange + 1 })),
-  setRStartDate: (newStartDate: string) => set((state) => ({startDate: newStartDate})),
-  setREndDate: (newEndDate: string) => set((state) => ({endDate: newEndDate}))
+  setRStartDate: (newStartDate: string) => set(() => ({startDate: newStartDate})),
+  setREndDate: (newEndDate: string) => set(() => ({endDate: newEndDate}))
 }))
