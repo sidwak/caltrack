@@ -59,7 +59,7 @@ export default function TodaysFoodCard() {
             Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="animate-pulse bg-gray-200 dark:bg-gray-900 h-[56px] rounded-lg"
+                className="animate-pulse bg-gray-200 dark:bg-[var(--sidebar-accent)] h-[56px] rounded-lg"
               />
             ))
           ) : foodItems.length > 0 ? (

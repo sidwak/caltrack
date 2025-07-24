@@ -21,7 +21,7 @@ export default function HomePage() {
       const { data, error } = await supabase.auth.getUser();
 
       if (error) {
-        console.error("Error getting user:", error.message);
+        console.log("Error getting user:", error.message);
       } else {
         setUser(data.user);
       }

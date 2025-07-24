@@ -111,9 +111,7 @@ export function CaloriesBigBarChart() {
             </BarChart>
           </ChartContainer>
         ) : (
-          <div className="flex items-center justify-center w-full h-[500px] rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--sidebar-accent)]">
-            Loading...
-          </div>
+          <div className="flex items-center justify-center w-full h-[500px] rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--sidebar-accent)]"></div>
         )}
       </CardContent>
     </Card>

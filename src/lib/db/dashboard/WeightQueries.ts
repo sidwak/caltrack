@@ -1,7 +1,15 @@
 import { supabase } from "@/lib/supabaseClient";
 import { toLocalISOString } from "@/lib/utils";
 
-export async function GetWeightForLast6Days(): Promise<WeightLog[]> {
+export type WeightLog = {
+  day: string;
+  weight: number;
+};
+
+export async function GetWeightForDateRange(
+  startDate: string,
+  endDate: string
+): Promise<WeightLog[]> {
   const {
     data: { user },
     error: userError,
@@ -11,29 +19,15 @@ export async function GetWeightForLast6Days(): Promise<WeightLog[]> {
 
   const userId = user.id;
 
-  // Get 6-day date window
-  const today = new Date();
-  const days: string[] = [];
-  const dates: string[] = [];
-
-  for (let i = 5; i >= 0; i--) {
-    const d = new Date(today);
-    d.setDate(today.getDate() - i);
-    const isoDate = d.toISOString().split("T")[0];
-    dates.push(isoDate);
-    days.push(d.toLocaleDateString("en-US", { weekday: "short" }));
-  }
-  // Fetch weight_logs within that range
   const { data, error } = await supabase
     .from("weight_logs")
     .select("weight, inserted_at")
     .eq("user_id", userId)
-    .gte("inserted_at", `${dates[0]}T00:00:00`)
-    .lte("inserted_at", `${dates[5]}T23:59:59`);
+    .gte("inserted_at", `${startDate}T00:00:00`)
+    .lte("inserted_at", `${endDate}T23:59:59`);
 
   if (error) throw new Error("Failed to fetch weight logs");
 
-  // Map logs by date (only first weight of the day counts)
   const weightByDate: Record<string, number> = {};
   for (const entry of data || []) {
     const dateKey = toLocalISOString(new Date(entry.inserted_at)).split("T")[0];
@@ -42,7 +36,18 @@ export async function GetWeightForLast6Days(): Promise<WeightLog[]> {
     }
   }
 
-  // Assemble final array
+  const dates: string[] = [];
+  const days: string[] = [];
+  let currentDate = new Date(startDate);
+  const lastDate = new Date(endDate);
+
+  while (currentDate <= lastDate) {
+    const isoDate = currentDate.toISOString().split("T")[0];
+    dates.push(isoDate);
+    days.push(currentDate.toLocaleDateString("en-US", { weekday: "short" }));
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
   return dates.map((date, idx) => ({
     day: days[idx],
     weight: weightByDate[date] ?? 0,

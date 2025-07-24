@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDashboardRouteStore } from "@/stores/dashboard/useDashboardRouteStore";
 
 // Menu items.
 const items = [
@@ -49,7 +50,7 @@ type DashboardRoute =
   | "Home"
   | "History"
   | "Analysis"
-  | "Search"
+  | "Calhelp"
   | "Settings"
   | null;
 
@@ -57,14 +58,14 @@ const validRoutes: Record<string, DashboardRoute> = {
   dashboard: "Home",
   "dashboard/history": "History",
   "dashboard/analysis": "Analysis",
-  "dashboard/search": "Search",
+  "dashboard/calhelp": "Calhelp",
   "dashboard/settings": "Settings",
 };
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const [currentDashboardRoute, setCurrentDashboardRoute] =
-    useState<DashboardRoute>(null);
+  const { currentDashboardRoute, setCurrentDashboardRoute } =
+    useDashboardRouteStore();
 
   useEffect(() => {
     if (!pathname) return;
@@ -87,16 +88,18 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" variant="inset">
-      <SidebarContent>
+      <SidebarContent className="ps-2">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-xl">Caltrack</SidebarGroupLabel>
-          <SidebarGroupContent>
+          <SidebarGroupLabel className="text-xl">
+            <Link href="/">Caltrack</Link>
+          </SidebarGroupLabel>
+          <SidebarGroupContent className="mt-4">
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     asChild
-                    className={`py-1 px-2 ${
+                    className={`py-5 px-2 ${
                       currentDashboardRoute === item.title
                         ? "bg-[var(--sidebar-primary)]"
                         : ""

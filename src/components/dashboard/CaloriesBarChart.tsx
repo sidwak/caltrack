@@ -45,11 +45,13 @@ export function CaloriesBarChart() {
   const [caloriesHistoryData, setCaloriesHistoryData] = useState<
     CaloriesPerDay[]
   >([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchLast6DaysCaloriesData = async () => {
       const data = await GetCaloriesSumForLast6Days();
       setCaloriesHistoryData(data);
+      setLoading(false);
     };
     fetchLast6DaysCaloriesData();
   }, [refreshKeyTodaysFood]);
@@ -61,35 +63,39 @@ export function CaloriesBarChart() {
         <CardDescription>January - June 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col justify-end h-full">
-        <ChartContainer config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={caloriesHistoryData}
-            margin={{
-              top: 25,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="day"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey="Calories" fill="var(--chart-1)" radius={8}>
-              <LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
+        {loading === false ? (
+          <ChartContainer config={chartConfig}>
+            <BarChart
+              accessibilityLayer
+              data={caloriesHistoryData}
+              margin={{
+                top: 25,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="day"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
               />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey="Calories" fill="var(--chart-1)" radius={8}>
+                <LabelList
+                  position="top"
+                  offset={12}
+                  className="fill-foreground"
+                  fontSize={12}
+                />
+              </Bar>
+            </BarChart>
+          </ChartContainer>
+        ) : (
+          <div className="flex items-center justify-center w-full h-[200px] rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--sidebar-accent)]"></div>
+        )}
       </CardContent>
     </Card>
   );

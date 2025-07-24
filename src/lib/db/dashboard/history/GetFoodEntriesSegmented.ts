@@ -19,25 +19,26 @@ export async function GetFoodEntriesSegmented(segment: number) {
   }
 
   const today = new Date();
-  const daysOffset = (segment - 1) * 5;
-  let firstQueryOffset = 0
-  if (segment > 1){
-    firstQueryOffset = 1
-  }
+  today.setHours(0, 0, 0, 0); // Normalize today to start of day
 
-  const start = subDays(today, daysOffset + 5)
-  //start.setDate(subDays(start, 30)); // go back to earliest date in range
+  const endDayOffset = (segment - 1) * 5;
+  const startDayOffset = (segment * 5) - 1;
 
-  const end = addDays(start, 5 - firstQueryOffset)
-  useHistoryPageStore.getState().setEndDate(end)
-  //end.setDate(end.getDate() - daysOffset); // latest date in range
+  const endDate = subDays(today, endDayOffset);
+  const startDate = subDays(today, startDayOffset);
+
+  // Set time to end of day for endDate and start of day for startDate for accurate range
+  endDate.setHours(23, 59, 59, 999);
+  startDate.setHours(0, 0, 0, 0);
+
+  useHistoryPageStore.getState().setEndDate(endDate);
 
   const { data, error } = await supabase   
     .from("food_entries")
     .select("*")
     .eq("user_id", user.id)
-    .gte("entry_date", toLocalISOString(start).split("T")[0])
-    .lte("entry_date", toLocalISOString(end).split("T")[0])
+    .gte("entry_date", toLocalISOString(startDate).split("T")[0])
+    .lte("entry_date", toLocalISOString(endDate).split("T")[0])
     .order("entry_date", { ascending: false });
 
   if (error) {

@@ -12,7 +12,12 @@ export default function FoodHistoryDataTable() {
   useEffect(() => {
     const fetchFoodEntriesSegmented = async () => {
       const data = await GetFoodEntriesSegmented(loadCounter);
-      setHistoryData((prevData) => [...prevData, ...data]);
+      setHistoryData((prevData) => {
+        const existingIds = new Set(prevData.map(entry => entry.id));
+        const uniqueNewData = data.filter(entry => !existingIds.has(entry.id));
+        return [...prevData, ...uniqueNewData];
+      });
+      console.log(data);
     };
     fetchFoodEntriesSegmented();
   }, [loadCounter]);

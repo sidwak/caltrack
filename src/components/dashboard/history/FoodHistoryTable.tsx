@@ -36,6 +36,7 @@ const groupByDate = (entries: FoodEntry[]): GroupedEntries[] => {
     acc[date].totalCals += entry.total_cal || 0;
     return acc;
   }, {} as Record<string, GroupedEntries>);
+  console.log(grouped);
   return Object.values(grouped).sort((a, b) => b.date.localeCompare(a.date));
 };
 

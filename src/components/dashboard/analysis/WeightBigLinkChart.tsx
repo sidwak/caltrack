@@ -18,50 +18,56 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useEffect, useState } from "react";
+import { useAnalysisPageStore } from "@/stores/dashboard/analysis/useAnalysisPageStore";
 import {
-  GetWeightForLast6Days,
+  GetWeightForDateRange,
   WeightLog,
-} from "@/lib/db/dashboard/GetWeightForLast6Days";
-import { useWeightInsertStore } from "@/stores/dashboard/useWeightInsertStore";
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-];
+} from "@/lib/db/dashboard/WeightQueries";
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  weight: {
+    label: "Weight",
     color: "hsl(var(--chart-1))",
-  },
-  mobile: {
-    label: "Mobile",
-    color: "hsl(var(--chart-2))",
   },
 } satisfies ChartConfig;
 
 export function WeightBigLineChart() {
+  const { refreshKeyDateRange, startDate, endDate } = useAnalysisPageStore();
+  const [weightChartData, setWeightChartData] = useState<
+    WeightLog[] | undefined
+  >(undefined);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchWeightDataForDateRange = async () => {
+      const data = await GetWeightForDateRange(startDate, endDate);
+      setWeightChartData(data);
+    };
+    if (startDate !== "" && endDate !== "") {
+      fetchWeightDataForDateRange();
+    }
+  }, [refreshKeyDateRange, startDate, endDate]);
+
+  useEffect(() => {
+    if (weightChartData !== undefined) {
+      setLoading(false);
+    }
+  }, [weightChartData]);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Weight History</CardTitle>
-        <CardDescription>Your weight since last 6 days</CardDescription>
+        <CardTitle>Weight Analysis</CardTitle>
+        <CardDescription>
+          Choose the date range to view the history
+        </CardDescription>
       </CardHeader>
       <CardContent>
         {loading === false ? (
           <ChartContainer config={chartConfig}>
             <LineChart
               accessibilityLayer
-              data={chartData}
+              data={weightChartData}
               margin={{
                 top: 10,
                 left: 17,
@@ -70,7 +76,7 @@ export function WeightBigLineChart() {
             >
               <CartesianGrid vertical={false} />
               <XAxis
-                dataKey="month"
+                dataKey="day"
                 tickLine={false}
                 axisLine={false}
                 tickMargin={8}
@@ -80,7 +86,7 @@ export function WeightBigLineChart() {
                 content={<ChartTooltipContent hideLabel />}
               />
               <Line
-                dataKey="desktop"
+                dataKey="weight"
                 type="natural"
                 stroke="var(--chart-1)"
                 strokeWidth={2}
@@ -94,9 +100,7 @@ export function WeightBigLineChart() {
             </LineChart>
           </ChartContainer>
         ) : (
-          <div className="flex items-center justify-center w-full h-[500px] rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--sidebar-accent)]">
-            Loading...
-          </div>
+          <div className="flex items-center justify-center w-full h-[500px] rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--sidebar-accent)]"></div>
         )}
       </CardContent>
     </Card>

@@ -110,6 +110,24 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Scrollbar styles for dark theme */
+.dark ::-webkit-scrollbar {
+  width: 8px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #333;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #666;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+
 /* .rdp-root {
   --rdp-day-height: 2rem;
   --rdp-day-width: 2rem;

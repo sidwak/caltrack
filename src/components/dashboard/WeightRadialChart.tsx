@@ -43,6 +43,7 @@ export function WeightRadialChart() {
 
   const [userGoalWeight, setUserGoalWeight] = useState(60);
   const [userLatestWeight, setUserLatestWeight] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserCalorieTarget = async () => {
@@ -59,6 +60,12 @@ export function WeightRadialChart() {
       .catch((err) => alert(err.message));
   }, [refreshKeyTodaysWeight]);
 
+  useEffect(() => {
+    if (userGoalWeight !== 0 && userLatestWeight !== 0) {
+      setLoading(false);
+    }
+  }, [userGoalWeight, userLatestWeight]);
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
@@ -66,58 +73,62 @@ export function WeightRadialChart() {
         <CardDescription>Track your weight goal</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[183px]"
-        >
-          <RadialBarChart
-            data={chartData}
-            startAngle={0}
-            endAngle={(userLatestWeight / userGoalWeight) * 360}
-            innerRadius={80}
-            outerRadius={110}
+        {loading === false ? (
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square max-h-[183px]"
           >
-            <PolarGrid
-              gridType="circle"
-              radialLines={false}
-              stroke="none"
-              className="first:fill-muted last:fill-background"
-              polarRadius={[86, 74]}
-            />
-            <RadialBar dataKey="visitors" background cornerRadius={10} />
-            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
+            <RadialBarChart
+              data={chartData}
+              startAngle={0}
+              endAngle={(userLatestWeight / userGoalWeight) * 360}
+              innerRadius={80}
+              outerRadius={110}
+            >
+              <PolarGrid
+                gridType="circle"
+                radialLines={false}
+                stroke="none"
+                className="first:fill-muted last:fill-background"
+                polarRadius={[86, 74]}
+              />
+              <RadialBar dataKey="visitors" background cornerRadius={10} />
+              <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+                <Label
+                  content={({ viewBox }) => {
+                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                      return (
+                        <text
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-4xl font-bold"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
                         >
-                          {userLatestWeight}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          {userGoalWeight - userLatestWeight} KGs Left
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </PolarRadiusAxis>
-          </RadialBarChart>
-        </ChartContainer>
+                          <tspan
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            className="fill-foreground text-4xl font-bold"
+                          >
+                            {userLatestWeight}
+                          </tspan>
+                          <tspan
+                            x={viewBox.cx}
+                            y={(viewBox.cy || 0) + 24}
+                            className="fill-muted-foreground"
+                          >
+                            {userGoalWeight - userLatestWeight} KGs Left
+                          </tspan>
+                        </text>
+                      );
+                    }
+                  }}
+                />
+              </PolarRadiusAxis>
+            </RadialBarChart>
+          </ChartContainer>
+        ) : (
+          <div className="flex items-center justify-center w-full h-full rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--sidebar-accent)]"></div>
+        )}
       </CardContent>
     </Card>
   );
