@@ -18,14 +18,16 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useEffect, useState } from "react";
-import {
-  CaloriesPerDay,
-  GetCaloriesSumForLast6Days,
-} from "@/lib/db/dashboard/GetCaloriesSumForLast6Days";
+import { GetCaloriesSumForLast6Days } from "@/lib/db/dashboard/GetCaloriesSumForLast6Days";
 import { useFoodInsertStore } from "@/stores/dashboard/useFoodInsertStore";
 import { DatePicker } from "../history/DatePicker";
 import { Label } from "@/components/ui/label";
-import { DatePickerWithRange } from "../history/DatePickerWithRange";
+import { DatePickerWithRange } from "./DatePickerWithRange";
+import { useAnalysisPageStore } from "@/stores/dashboard/analysis/useAnalysisPageStore";
+import {
+  CaloriesPerDate,
+  GetCaloriesSumForDateRange,
+} from "@/lib/db/dashboard/CalorieQueries";
 const chartData = [
   { month: "January", desktop: 186 },
   { month: "February", desktop: 305 },
@@ -47,19 +49,27 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function CaloriesBigBarChart() {
-  const { refreshKeyTodaysFood } = useFoodInsertStore();
-
-  const [caloriesHistoryData, setCaloriesHistoryData] = useState<
-    CaloriesPerDay[]
-  >([]);
+  const { refreshKeyDateRange, startDate, endDate } = useAnalysisPageStore();
+  const [barchartData, setBarchartData] = useState<
+    CaloriesPerDate[] | undefined
+  >(undefined);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchLast6DaysCaloriesData = async () => {
-      const data = await GetCaloriesSumForLast6Days();
-      setCaloriesHistoryData(data);
+    const fetchCaloriesDataForDateRange = async () => {
+      const data = await GetCaloriesSumForDateRange(startDate, endDate);
+      setBarchartData(data);
     };
-    fetchLast6DaysCaloriesData();
-  }, [refreshKeyTodaysFood]);
+    if (startDate !== "" && endDate !== "") {
+      fetchCaloriesDataForDateRange();
+    }
+  }, [refreshKeyDateRange]);
+
+  useEffect(() => {
+    if (barchartData !== undefined) {
+      setLoading(false);
+    }
+  }, [barchartData]);
 
   return (
     <Card>
@@ -70,35 +80,41 @@ export function CaloriesBigBarChart() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              top: 20,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Bar dataKey="desktop" fill="var(--chart-1)" radius={8}>
-              <LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
+        {loading === false ? (
+          <ChartContainer config={chartConfig}>
+            <BarChart
+              accessibilityLayer
+              data={barchartData}
+              margin={{
+                top: 20,
+              }}
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
               />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Bar dataKey="caloriesSum" fill="var(--chart-1)" radius={8}>
+                <LabelList
+                  position="top"
+                  offset={12}
+                  className="fill-foreground"
+                  fontSize={12}
+                />
+              </Bar>
+            </BarChart>
+          </ChartContainer>
+        ) : (
+          <div className="flex items-center justify-center w-full h-[500px] rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--sidebar-accent)]">
+            Loading...
+          </div>
+        )}
       </CardContent>
     </Card>
   );

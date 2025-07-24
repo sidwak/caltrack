@@ -1,4 +1,7 @@
 import { supabase } from "@/lib/supabaseClient";
+import { toLocalISOString } from "@/lib/utils";
+import { useHistoryPageStore } from "@/stores/dashboard/history/useHistoryPageStore";
+import { addDays, subDays } from "date-fns";
 
 /**
  * Fetch food_entries for a segment of days (5 days per segment)
@@ -17,19 +20,24 @@ export async function GetFoodEntriesSegmented(segment: number) {
 
   const today = new Date();
   const daysOffset = (segment - 1) * 5;
+  let firstQueryOffset = 0
+  if (segment > 1){
+    firstQueryOffset = 1
+  }
 
-  const start = new Date(today);
-  start.setDate(start.getDate() - daysOffset - 4); // go back to earliest date in range
+  const start = subDays(today, daysOffset + 5)
+  //start.setDate(subDays(start, 30)); // go back to earliest date in range
 
-  const end = new Date(today);
-  end.setDate(end.getDate() - daysOffset); // latest date in range
+  const end = addDays(start, 5 - firstQueryOffset)
+  useHistoryPageStore.getState().setEndDate(end)
+  //end.setDate(end.getDate() - daysOffset); // latest date in range
 
-  const { data, error } = await supabase
+  const { data, error } = await supabase   
     .from("food_entries")
     .select("*")
     .eq("user_id", user.id)
-    .gte("entry_date", start.toISOString().split("T")[0])
-    .lte("entry_date", end.toISOString().split("T")[0])
+    .gte("entry_date", toLocalISOString(start).split("T")[0])
+    .lte("entry_date", toLocalISOString(end).split("T")[0])
     .order("entry_date", { ascending: false });
 
   if (error) {

@@ -13,18 +13,33 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAnalysisPageStore } from "@/stores/dashboard/analysis/useAnalysisPageStore";
+
+const convertDateToString = (date: Date) => {
+  const Date = format(date, "yyyy-MM-dd");
+  return `${Date}`;
+};
 
 export function DatePickerWithRange({
   className,
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const [date, setDate] = React.useState<DateRange | undefined>({
+  const [date, setDate] = useState<DateRange | undefined>({
     from: subDays(new Date(), 9),
     to: new Date(),
   });
   const [startDate, setStartDate] = useState<Date | null>(null);
+  const { setRStartDate, setREndDate, triggerRefreshDateRange } =
+    useAnalysisPageStore();
 
-  // Handle start date selection
+  useEffect(() => {
+    if (date?.from !== undefined && date.to !== undefined) {
+      setRStartDate(convertDateToString(date.from));
+      setREndDate(convertDateToString(date.to));
+      triggerRefreshDateRange();
+    }
+  }, [date]);
+
   const handleStartDateClick = (date: Date) => {
     setStartDate(date);
     setDate({ from: date, to: undefined }); // Clear the "to" date when a new "from" date is selected

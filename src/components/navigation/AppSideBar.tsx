@@ -34,8 +34,8 @@ const items = [
     icon: ChartArea,
   },
   {
-    title: "Search",
-    url: "#",
+    title: "Calhelp",
+    url: "/dashboard/calhelp",
     icon: Search,
   },
   {

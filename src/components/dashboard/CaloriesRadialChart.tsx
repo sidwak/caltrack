@@ -134,7 +134,7 @@ export function CaloriesRadialChart() {
             </RadialBarChart>
           </ChartContainer>
         ) : (
-          <div className="flex items-center justify-center w-full h-full rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--background)]">
+          <div className="flex items-center justify-center w-full h-full rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--sidebar-accent)]">
             Loading...
           </div>
         )}

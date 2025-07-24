@@ -48,18 +48,7 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function WeightBigLineChart() {
-  const { refreshKeyTodaysWeight } = useWeightInsertStore();
-
-  const [weightHistoryData, setWeightHistoryData] = useState<WeightLog[]>([]);
-
-  useEffect(() => {
-    const fetchWeightForLast6Days = async () => {
-      const data = await GetWeightForLast6Days();
-      console.log(data);
-      setWeightHistoryData(data);
-    };
-    fetchWeightForLast6Days();
-  }, [refreshKeyTodaysWeight]);
+  const [loading, setLoading] = useState(true);
 
   return (
     <Card>
@@ -68,41 +57,47 @@ export function WeightBigLineChart() {
         <CardDescription>Your weight since last 6 days</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <LineChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              top: 10,
-              left: 17,
-              right: 12,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Line
-              dataKey="desktop"
-              type="natural"
-              stroke="var(--chart-1)"
-              strokeWidth={2}
-              dot={{
-                fill: "var(--chart-1)",
+        {loading === false ? (
+          <ChartContainer config={chartConfig}>
+            <LineChart
+              accessibilityLayer
+              data={chartData}
+              margin={{
+                top: 10,
+                left: 17,
+                right: 12,
               }}
-              activeDot={{
-                r: 6,
-              }}
-            />
-          </LineChart>
-        </ChartContainer>
+            >
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Line
+                dataKey="desktop"
+                type="natural"
+                stroke="var(--chart-1)"
+                strokeWidth={2}
+                dot={{
+                  fill: "var(--chart-1)",
+                }}
+                activeDot={{
+                  r: 6,
+                }}
+              />
+            </LineChart>
+          </ChartContainer>
+        ) : (
+          <div className="flex items-center justify-center w-full h-[500px] rounded-2xl animate-pulse bg-gray-200 dark:bg-[var(--sidebar-accent)]">
+            Loading...
+          </div>
+        )}
       </CardContent>
     </Card>
   );

@@ -19,7 +19,7 @@ import { Label } from "@/components/ui/label";
 export default function DashboardPage() {
   return (
     <div>
-      <div className="responsive-grid gap-6 p-6">
+      <div className="autofill-grid gap-6 p-6">
         <TodaysFoodCard />
         <AddFoodCard />
         <CaloriesRadialChart />

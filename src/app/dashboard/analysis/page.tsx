@@ -1,6 +1,6 @@
 import { CaloriesBigBarChart } from "@/components/dashboard/analysis/CaloriesBigBarChart";
 import { WeightBigLineChart } from "@/components/dashboard/analysis/WeightBigLinkChart";
-import { DatePickerWithRange } from "@/components/dashboard/history/DatePickerWithRange";
+import { DatePickerWithRange } from "@/components/dashboard/analysis/DatePickerWithRange";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
@@ -11,7 +11,10 @@ export default function AnalysisPage() {
         <div className="w-2/3">
           <div className="flex gap-3 w-fit items-end mb-6">
             <div className="grow grid gap-2 w-1/4">
-              <Label>Date Range</Label>
+              <Label>
+                Date Range{" "}
+                <span className="text-muted-foreground">(Max 10 days)</span>
+              </Label>
               <DatePickerWithRange />
             </div>
             <Button>View</Button>
