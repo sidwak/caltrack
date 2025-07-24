@@ -1,11 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { DayPicker, getDefaultClassNames } from "react-day-picker";
+import { DayPicker } from "react-day-picker";
 import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { useState } from "react";
+import { buttonVariants } from "./button";
 
 function Calendar({
   className,
@@ -13,7 +11,7 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: React.ComponentProps<typeof DayPicker>) {
-  const defaultClassnames = getDefaultClassNames();
+  //const defaultClassnames = getDefaultClassNames();
 
   return (
     <DayPicker
